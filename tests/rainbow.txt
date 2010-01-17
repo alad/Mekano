@@ -1,0 +1,4 @@
+train/politics/3 politics  corruption 1  win 1  country 1  national 1  run 1  
+train/politics/4 politics  obama 1  hillary 1  president 1  united 1  
+train/sports/1 sports  ball 1  bat 1  catch 1  score 1  
+train/sports/2 sports  run 1  hit 1  homerun 1  
