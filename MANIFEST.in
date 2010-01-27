@@ -1,0 +1,5 @@
+graft mekano
+graft support
+graft tests
+include *.cfg
+global-exclude *.pyc
