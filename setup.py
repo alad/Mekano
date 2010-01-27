@@ -14,6 +14,10 @@ ext_CS = Extension("mekano.CorpusStats",
                         ["mekano/CorpusStats.pyx", "mekano/CorpusStats.pxd", "mekano/AtomVector.pxd"],
                         language="c++")
 
+ext_LR = Extension("mekano.LogisticRegressionClassifier",
+                             ["mekano/LogisticRegressionClassifier.pyx", "mekano/AtomVector.pxd", "support/LRHelper.cpp"],
+                             language="c++")
+
 ext_InvertedIndex = Extension("mekano.InvertedIndex",
                         ["mekano/InvertedIndex.pyx", "mekano/InvertedIndex.pxd", "mekano/AtomVector.pxd", "support/CUtils.cpp"],
                         language="c++")
@@ -38,7 +42,7 @@ setup(
   author = "Abhimanyu Lad",
   author_email = "alad@cs.cmu.edu",
   packages = ["mekano"],
-  ext_modules = [ext_AtomVector, ext_AtomVectorStore, ext_CS,
+  ext_modules = [ext_AtomVector, ext_AtomVectorStore, ext_CS, ext_LR,
                  ext_KNNClassifier, ext_Evaluator, ext_InvertedIndex, ext_WV],
   cmdclass = {'build_ext': build_ext},
 )

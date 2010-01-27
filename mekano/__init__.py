@@ -9,7 +9,7 @@ Additional documentation is available in the docstrings.
 alad@cs.cmu.edu
 """
 
-__version__ = "1.1"
+__version__ = "1.3"
 
 # Misc
 import Errors as errors
@@ -35,6 +35,7 @@ from CorpusStats import CorpusStats
 
 # Classifiers
 from SVMClassifier import SVMClassifier, SVMMultiClassifier
+from LogisticRegressionClassifier import LogisticRegressionClassifier
 from KNNClassifier import KNNClassifier
 from MultiClassifier import MultiClassifier
 
