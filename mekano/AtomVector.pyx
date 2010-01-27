@@ -1,12 +1,25 @@
 cdef class AtomVector:
     """
-    a = AtomVector(vec = None)
+    a = AtomVector(vec = None, name="")
+    If supplied, vec is used to initialize; should support iteritems().
+    
+    a = AtomVector.fromstring("1:10.0 2:25.0 7:13.0")
 
-    vec can be anything that can return a sequence of tuples,
-    e.g. another AtomVector, or dict.items()
+    Behaves like a defaultdict(float).
+        Has iterkeys(), iteritems(), supports 'in'.
 
-    If supplied, it's contents are copied to initialize this
-    AtomVector
+    Printing:
+        a.tostring(af)  # An atomfactory
+    
+    Operators:
+        +   Merges two atomvectors.
+        *   Does dot product.
+        /   Element-wise divide (normalization).
+    
+    Normalization:
+        a.Normalize()       # in-place
+        a.Normalized()  
+    
     """
 
     def __cinit__(AtomVector self, vec = None, name = ""):

@@ -1,10 +1,6 @@
 cimport AtomVector
 import cPickle
 
-def _fromfile(filename):
-    with open(filename, "r") as fin:
-        a = cPickle.load(fin)
-    return a
 
 cdef class CorpusStats:
     """
@@ -13,8 +9,13 @@ cdef class CorpusStats:
     This class is meant for sequential processing of vectors.
     It does not check if the same vector has been passed twice.
 
-    scs = CorpusStats()
-    scs.add(atomvector)
+    cs = CorpusStats()
+    cs.add(atomvector)
+    
+    cs.getN()
+    cs.getDF(atoms)
+    
+    Supports iteritems()
     """
 
     def __init__(self):
@@ -64,4 +65,9 @@ cdef class CorpusStats:
         with open(filename, "w") as fout:
             cPickle.dump(self, fout, -1)
 
-    fromfile = staticmethod(_fromfile)
+    @classmethod
+    def fromfile(cls, filename):
+        with open(filename, "r") as fin:
+            a = cPickle.load(fin)
+        return a
+    

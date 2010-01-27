@@ -8,7 +8,7 @@ cdef extern from "math.h":
 cdef class WeightVectors:
     """For creating LTC vectors.
 
-    wv = WeightVectors(cs) 
+    wv = WeightVectors(cs, cache=False) 
     Creates a weight-vector cache linked to the given corpus stats.
 
     cs.add(unweighted_vector) 

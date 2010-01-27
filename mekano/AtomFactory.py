@@ -21,6 +21,12 @@ class AtomFactory:
     assert(af(1) == "apples")
     
     Note: af(1) is candy for af.get_object(1)
+    
+    Module functions:
+    convertAtom(oldAF, newAF, atom)
+    convertAtomVector(oldAF, newAF, av)
+        Useful with feature selection, e.g.,
+        when using af.remove(objects).
     """
 
     def __init__(self, name = "noname"):
