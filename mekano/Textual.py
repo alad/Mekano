@@ -27,25 +27,32 @@ word_number_regex = re.compile(r"\b[a-z][a-z0-9]{3,}\b|(\$|\b)[0-9]+(,[0-9]{3})*
 
 def BasicTokenizer(s, minlen=1):
     """Split on any non-word letter.
-
+    
     Words need not start with [a-z]
     """
     for token in wordsplitter_rex.split(s.lower()):
         if len(token) >= minlen:
           yield token
+
     
 def WordRegexTokenizer(s):
     """Find 4 or more letter words.
-
+    
     Words must start with [a-z]
     """
     for match in word_regex.finditer(s.lower()):
         yield match.group()
 
+
 def WordNumberRegexTokenizer(s):
     """Find 4 or more letter words or numbers/currencies.
-
+    
     Words must start with [a-z]
     """
     for match in word_number_regex.finditer(s.lower()):
         yield match.group()
+
+
+def tokenizer(s):
+    return WordRegexTokenizer(s)
+
