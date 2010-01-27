@@ -1,18 +1,24 @@
 import cPickle
 import re
 
-def loadpickleitems(filename):
+def loadpickleitems(filename, progressinterval=None):
     """
     Return a generator that yields each item in a pickled
     file.
     """
     fin = open(filename)
+    i = 0
     while(True):
         try:
             r = cPickle.load(fin)
+            i += 1
+            if progressinterval is not None and i%progressinterval == 0:
+                print "[%s]" % i
             yield r
         except EOFError:
             fin.close()
+            if progressinterval is not None:
+                print "[%s]" % i
             return
 
 def dump(obj, filename):
