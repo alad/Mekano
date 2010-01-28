@@ -28,6 +28,7 @@ def dump(obj, filename):
     with open(filename, "w") as fout:
         cPickle.dump(obj, fout, -1)
 
+
 def load(filename):
     """
     Load a single object from a pickle file.
@@ -151,6 +152,7 @@ class SMARTParser(StateMachineFileParser):
         self.sectionheader = None
         self.cat_regex = re.compile("([^ ]+) 1")
         self.allowedsections = sections
+    
 
     def onMisc(self, line):
         """Waiting for a new doc to start"""
@@ -160,6 +162,7 @@ class SMARTParser(StateMachineFileParser):
             self.cats = None
             self.sectionheader = None
             return "GotDocId"
+    
 
     def onGotDocId(self, line):
         """Waiting for the .C section to start"""

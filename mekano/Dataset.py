@@ -43,12 +43,14 @@ class Dataset:
         self.cs = None
         self.catfactory = None
         self.tokenfactory = None
+    
 
     def __iter__(self):
         """Iterate over (doc, labels) tuples.
 
         """
         return izip(self.docs, self.labels)
+    
 
     def add(self, doc, labels):
         """
@@ -60,6 +62,7 @@ class Dataset:
         self.docs.append(doc)
         self.labels.append(labels)
         self.digested = False
+    
 
     def digest(self, force=False):
         if self.digested and force==False: return
@@ -71,10 +74,12 @@ class Dataset:
             elif labels:
                 self.labelset.add(labels)
         self.digested = True
+    
 
     def isBinary(self):
         self.digest()
         return len(self.labelset) == 1
+    
 
     def getCategoryCounts(self):
         """Get a dictionary of labels and respective document counts.
@@ -88,6 +93,7 @@ class Dataset:
                 counts[label] += 1
 
         return counts
+    
 
     def __repr__(self):
         self.digest()
