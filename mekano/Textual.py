@@ -1,3 +1,5 @@
+from AtomVector import AtomVector
+
 """mekano.Textual
 
 Textual services like tokenization, stemming, stop word removal
@@ -16,7 +18,7 @@ from itertools import ifilter
 
 wordsplitter_rex = re.compile("\W+")
 
-word_regex = re.compile(r"\b[a-z]{4,}\b")
+word_regex = re.compile(r"\b[a-z]{3,}\b")
 
 # todo: broken: $700 is not parsed.                             
 #word_number_regex = re.compile(r"\b[a-z][a-z0-9]{3,}\b|\$?[0-9]*\.?[0-9]+")
@@ -36,7 +38,7 @@ def BasicTokenizer(s, minlen=1):
 
     
 def WordRegexTokenizer(s):
-    """Find 4 or more letter words.
+    """Find 3 or more letter words.
     
     Words must start with [a-z]
     """
@@ -53,6 +55,16 @@ def WordNumberRegexTokenizer(s):
         yield match.group()
 
 
-def tokenizer(s):
-    return WordRegexTokenizer(s)
+def Vectorize(s, af, tokenizer = WordRegexTokenizer):
+    """Create an AtomVector from a string.
+    
+    Tokenizes string 's' using tokenizer, creating
+    atoms using AtomFactory 'af'.
+    """
+    av = AtomVector()
+    for word in tokenizer(s):
+        atom = af[word]
+        av[atom] += 1
+    return av
+
 
