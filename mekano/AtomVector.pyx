@@ -50,7 +50,14 @@ cdef class AtomVector:
         return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (a,v) for a,v in self.iteritems()]) + "])"
         
     def tostring(self, af):
-        return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (af.get_object(a),v) for a,v in self.iteritems()]) + "])"
+        if len(af) < 50:
+            return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (af.get_object(a),v) for a,v in self.iteritems()]) + "])"
+        else:
+            s = sorted([(v,k) for k,v in self.iteritems()], reverse=True)
+            largest = ",".join(["%s:%5.3f" % (af(a),v) for v,a in s[:5]])
+            smallest = ",".join(["%s:%5.3f" % (af(a),v) for v,a in s[-5:]])
+            return "(" + self.name + "[" + largest + "..." + smallest + "])"
+            
 
     # >>>>>> Add
     def __iadd__(AtomVector self, AtomVector other):
