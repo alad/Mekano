@@ -67,6 +67,7 @@ class Dataset:
     def digest(self, force=False):
         if self.digested and force==False: return
 
+        self.labelset = set()
         for labels in self.labels:
             if hasattr(labels, "__iter__"):
                 for label in labels:
