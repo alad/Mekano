@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#define LRLONGDOUBLE 1
+
 #if LRLONGDOUBLE
     typedef long double LRREAL;
 #else
@@ -49,4 +51,4 @@ void LogisticRegressionTrainSparse(SparseData& X,
                       const UISet& docList);
 
 void copyToDVec(PyObject *src, DVec *dest);
-PyObject* ctrain(PyObject *docs, PyObject *labels, PyObject *mu, double lambda, int maxiter, double epsilon);
+PyObject* ctrain(PyObject *docs, PyObject *labels, PyObject *mu, double lambda, int maxiter, double epsilon, double c);

@@ -1,6 +1,6 @@
 #include <LRHelper.h>
 
-PyObject* ctrain(PyObject *docs, PyObject *labels, PyObject *mu, double lambda, int maxiter, double epsilon) {
+PyObject* ctrain(PyObject *docs, PyObject *labels, PyObject *mu, double lambda, int maxiter, double epsilon, double c) {
     SparseData sparseData;
     UISet docset;
     DVec Y;
@@ -39,11 +39,9 @@ PyObject* ctrain(PyObject *docs, PyObject *labels, PyObject *mu, double lambda, 
         Py_DECREF(result);
     }
     
-    cout << nf_found << " Features found.\n";
-    
     // Instance Weights
-    double posweight = 0.8/pos;
-    double negweight = 0.2/neg;
+    double posweight = c/(1+c)/pos;
+    double negweight = 1.0/(1+c)/neg;
     DVec S;
     for (int i=0;i<ndocs;i++) {
         if (Y[i] > 0.0) {
