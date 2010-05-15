@@ -92,5 +92,6 @@ def findThresholdsForDataset(classifier, ds):
     thres = Thresholder()
     preds = scoreAll(classifier, ds.docs)
     thres.addbatch(ds.labels, preds)
+    # We use classifier.labelset since it might be smaller than ds.labelset
     return thres.findthresholds(classifier.labelset)
 
