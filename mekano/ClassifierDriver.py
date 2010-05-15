@@ -4,7 +4,8 @@ def scoreAll(classifier, docs):
 
 def decideAll(classifier, docs, thresholds):
     return [applyThresholds(classifier.score(d), thresholds) for d in docs]
-    
+
+
 def applyThresholds(scores, thresholds):
     """Apply thresholds to the set of scores.
     Both inputs are dictinaries.
