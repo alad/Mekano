@@ -1,3 +1,6 @@
+#ifndef CUTILS_H
+#define CUTILS_H
+
 #include <stdio.h>
 #include <ext/hash_map>
 #include <ext/hash_set>
@@ -74,4 +77,5 @@ void del_a2avs(AtomToAtomVectorStoreMap* dict);
 // General purpose
 typedef std::vector<int> IntVector;
 
+#endif
 
