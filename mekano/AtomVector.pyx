@@ -50,7 +50,7 @@ cdef class AtomVector:
         return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (a,v) for a,v in self.iteritems()]) + "])"
         
     def tostring(self, af):
-        if len(af) < 50:
+        if len(self) < 50:
             return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (af.get_object(a),v) for a,v in self.iteritems()]) + "])"
         else:
             s = sorted([(v,k) for k,v in self.iteritems()], reverse=True)
