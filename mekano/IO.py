@@ -1,5 +1,5 @@
 import cPickle
-import re
+import sys, re
 
 def loadpickleitems(filename, progressinterval=None):
     """
@@ -13,7 +13,8 @@ def loadpickleitems(filename, progressinterval=None):
             r = cPickle.load(fin)
             i += 1
             if progressinterval is not None and i%progressinterval == 0:
-                print "[%s]" % i
+                sys.stdout.write("[%s]\r" % i)
+                sys.stdout.flush()
             yield r
         except EOFError:
             fin.close()
