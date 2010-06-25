@@ -119,7 +119,7 @@ class TrecParser(StateMachineFileParser):
     def onText(self, line):
         """Seeing text lines"""
         if line.startswith("</TEXT>"):
-            r = self.callback(self.docid, "".join(self.textlines))
+            r = self.callback(self.docid, " ".join(self.textlines))
             if r is False:
                 return False
             return "Misc"
