@@ -42,9 +42,8 @@ class StateMachineFileParser:
     """A state machine based line-oriented parser.
 
     You should subclass this and implement 'state'
-    functions that begin with 'on', for example:
-
-        onStart(self, line)
+    functions that begin with '_on', for example:
+        _onStart(self, line)
 
     Each such function:
       * takes a single argument 'line' which
@@ -52,35 +51,49 @@ class StateMachineFileParser:
       * returns the next state to go into, e.g. "End",
         or returns None (i.e. returns nothing) to stay
         in the same state.
-      * returns False to terminate further parsing.
     
-    To begin parsing, call the parse(mystring) function.
+    Additionally, two special functions must be defined
+    with no parameters:
+        _onInit(self)
+        _onFinish(self)
+    to handle initialization (local state) and end of file
+    (useful for formats that use no ending tag).
+    
     """
 
     def __init__(self):
         self._stateFunctions = {}
         self._introspect()
+        self.state = self._onInit()
 
     def _introspect(self):
         """
         Find all functions that begin with 'on' and create
         a map from the rest of their name to the function object.
         """
-        for fn in filter(lambda x: x.startswith("on"), dir(self)):
-            self._stateFunctions[fn[2:]] = getattr(self, fn)
+        for fn in filter(lambda x: x.startswith("_on"), dir(self)):
+            self._stateFunctions[fn[3:]] = getattr(self, fn)
 
-    def parse(self, s):
-        state = self._stateFunctions["Init"]()
-        for line in s.split("\n"):
-            fn = self._stateFunctions[state]
-            newstate = fn(line)
-            if newstate is False:
-                break
-            elif newstate is not None:
-                state = newstate
-        self.onFinish(line)
+    def parse(self, line):
+        fn = self._stateFunctions[self.state]
+        newstate = fn(line)
+        if newstate is not None:
+            self.state = newstate
+        
+    def parseFile(self, fin):
+        self._onInit()
+        for line in fin:
+            self.parse(line)
+        self.close()
     
-    def onFinish(self, line):
+    def parseFileName(self, fileName):
+        with open(fileName) as fin:
+            self.parseFile(fin)
+
+    def close(self):
+        self._onFinish()
+    
+    def _onFinish(self):
         pass
 
 
@@ -90,22 +103,24 @@ class TrecParser(StateMachineFileParser):
     tp = TrecParser(fin, callback)
 
     The callback function receives (docid, text).
+
+    To begin parsing, use one of:
+        parse(line)    # call repeatedly for each line.
+        parseFile(fin)
+        parseFileName(fileName)
     
-    If the callback function returns False, further
-    parsing is terminated. Not returning anything does not
-    constitute returning False!
     """
     
     def __init__(self, callback):
         StateMachineFileParser.__init__(self)
         self.callback = callback
     
-    def onInit(self):
+    def _onInit(self):
         self.docid = None
         self.textlines = []
         return "Misc"
         
-    def onMisc(self, line):
+    def _onMisc(self, line):
         """Waiting for a new doc to start"""
         if line.startswith("<DOCNO>"):
             p = line.find("<", 7)
@@ -113,17 +128,15 @@ class TrecParser(StateMachineFileParser):
             self.textlines = []
             return "GotDocId"
 
-    def onGotDocId(self, line):
+    def _onGotDocId(self, line):
         """Waiting for the TEXT section to start"""
         if line.startswith("<TEXT>"):
             return "Text"
 
-    def onText(self, line):
+    def _onText(self, line):
         """Seeing text lines"""
         if line.startswith("</TEXT>"):
-            r = self.callback(self.docid, " ".join(self.textlines))
-            if r is False:
-                return False
+            self.callback(self.docid, "".join(self.textlines))
             return "Misc"
         else:
             self.textlines.append(line)
@@ -134,28 +147,31 @@ class SMARTParser(StateMachineFileParser):
     tp = SMARTParser(callback, sections = None)
 
     The callback function receives (docid, cats, text).
-    If the callback function returns False, further
-    parsing is terminated. Not returning anything does not
-    constitute returning False!
     
     sections:    None          Read all sections.
                  ["T", "W"]    Only read sections .T and .W
+
+    To begin parsing, use one of:
+        parse(line)    # call repeatedly for each line.
+        parseFile(fin)
+        parseFileName(fileName)
+
     """
 
     def __init__(self, callback, sections = None):
         StateMachineFileParser.__init__(self)
         self.allowedsections = sections
         self.callback = callback
+        self.cat_regex = re.compile("([^ ]+) 1")
     
-    def onInit(self):
+    def _onInit(self):
         self.docid = None
         self.cats = None
         self.textlines = []
         self.sectionheader = None
-        self.cat_regex = re.compile("([^ ]+) 1")
         return "Misc"
     
-    def onMisc(self, line):
+    def _onMisc(self, line):
         """Waiting for a new doc to start"""
         if line.startswith(".I"):
             self.docid = line[2:].strip()
@@ -164,39 +180,39 @@ class SMARTParser(StateMachineFileParser):
             self.sectionheader = None
             return "GotDocId"
     
-    def onGotDocId(self, line):
+    def _onGotDocId(self, line):
         """Waiting for the .C section to start"""
         if line.startswith(".C"):
             return "SawDotC"
     
-    def onSawDotC(self, line):
+    def _onSawDotC(self, line):
         """Reading the categories line"""
         self.cats = [c.group(1) for c in self.cat_regex.finditer(line)]
         return "SectionHeader"
     
-    def onSectionHeader(self, line):
+    def _onSectionHeader(self, line):
         """Reading the section header line"""
         self.sectionheader = line[1:2]
         return "SectionText"
 
-    def onSectionText(self, line):
+    def _onSectionText(self, line):
         """Seeing text lines"""
         if line.startswith("."):
             if line.startswith(".I"):
-                self.doCallBack()
-                return self.onMisc(line)
+                self._doCallBack()
+                return self._onMisc(line)
             else:
-                return self.onSectionHeader(line)
+                return self._onSectionHeader(line)
         
         if self.allowedsections is not None and self.sectionheader not in self.allowedsections:
             return None
         
         self.textlines.append(line)
     
-    def onFinish(self, line):
-        self.doCallBack()
+    def _onFinish(self):
+        self._doCallBack()
     
-    def doCallBack(self):
+    def _doCallBack(self):
         if len(self.textlines):
             self.callback(self.docid, self.cats, "".join(self.textlines))
     
