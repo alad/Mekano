@@ -48,36 +48,32 @@ class StateMachineFileParser:
 
     Each such function:
       * takes a single argument 'line' which
-        contains the next line read from fin.
+        contains the next line read from input string.
       * returns the next state to go into, e.g. "End",
         or returns None (i.e. returns nothing) to stay
         in the same state.
       * returns False to terminate further parsing.
     
-    To begin parsing, call the parse() function.
+    To begin parsing, call the parse(mystring) function.
     """
 
-    def __init__(self, fin, start = "Start"):
-        if not hasattr(fin, "readline"):
-            raise Exception("fin must be a file-like object")
-        self.__fin = fin
-        self.__stateFunctions = {}
+    def __init__(self, start = "Start"):
+        self._stateFunctions = {}
         self.start = start
+        self._introspect()
 
-    def __introspect(self):
+    def _introspect(self):
         """
         Find all functions that begin with 'on' and create
         a map from the rest of their name to the function object.
         """
         for fn in filter(lambda x: x.startswith("on"), dir(self)):
-            self.__stateFunctions[fn[2:]] = getattr(self, fn)
+            self._stateFunctions[fn[2:]] = getattr(self, fn)
 
-    def parse(self):
-        self.__introspect()
-
+    def parse(self, s):
         state = self.start
-        for line in self.__fin:
-            fn = self.__stateFunctions[state]
+        for line in s.split("\n"):
+            fn = self._stateFunctions[state]
             newstate = fn(line)
             if newstate is False:
                 break
@@ -101,8 +97,8 @@ class TrecParser(StateMachineFileParser):
     constitute returning False!
     """
     
-    def __init__(self, fin, callback):
-        StateMachineFileParser.__init__(self, fin, "Misc")
+    def __init__(self, callback):
+        StateMachineFileParser.__init__(self, "Misc")
         self.docid = None
         self.textlines = []
         self.callback = callback
@@ -133,7 +129,7 @@ class TrecParser(StateMachineFileParser):
 class SMARTParser(StateMachineFileParser):
     """SMART file parser
 
-    tp = SMARTParser(fin, callback, sections = None)
+    tp = SMARTParser(callback, sections = None)
 
     The callback function receives (docid, cats, text).
     If the callback function returns False, further
@@ -144,8 +140,8 @@ class SMARTParser(StateMachineFileParser):
                  ["T", "W"]    Only read sections .T and .W
     """
 
-    def __init__(self, fin, callback, sections = None):
-        StateMachineFileParser.__init__(self, fin, "Misc")
+    def __init__(self, callback, sections = None):
+        StateMachineFileParser.__init__(self, "Misc")
         self.docid = None
         self.cats = None
         self.textlines = []
