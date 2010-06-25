@@ -57,9 +57,8 @@ class StateMachineFileParser:
     To begin parsing, call the parse(mystring) function.
     """
 
-    def __init__(self, start = "Start"):
+    def __init__(self):
         self._stateFunctions = {}
-        self.start = start
         self._introspect()
 
     def _introspect(self):
@@ -71,7 +70,7 @@ class StateMachineFileParser:
             self._stateFunctions[fn[2:]] = getattr(self, fn)
 
     def parse(self, s):
-        state = self.start
+        state = self._stateFunctions["Init"]()
         for line in s.split("\n"):
             fn = self._stateFunctions[state]
             newstate = fn(line)
@@ -98,10 +97,13 @@ class TrecParser(StateMachineFileParser):
     """
     
     def __init__(self, callback):
-        StateMachineFileParser.__init__(self, "Misc")
+        StateMachineFileParser.__init__(self)
+        self.callback = callback
+    
+    def onInit(self):
         self.docid = None
         self.textlines = []
-        self.callback = callback
+        return "Misc"
         
     def onMisc(self, line):
         """Waiting for a new doc to start"""
@@ -141,16 +143,18 @@ class SMARTParser(StateMachineFileParser):
     """
 
     def __init__(self, callback, sections = None):
-        StateMachineFileParser.__init__(self, "Misc")
+        StateMachineFileParser.__init__(self)
+        self.allowedsections = sections
+        self.callback = callback
+    
+    def onInit(self):
         self.docid = None
         self.cats = None
         self.textlines = []
-        self.callback = callback
         self.sectionheader = None
         self.cat_regex = re.compile("([^ ]+) 1")
-        self.allowedsections = sections
+        return "Misc"
     
-
     def onMisc(self, line):
         """Waiting for a new doc to start"""
         if line.startswith(".I"):
@@ -160,7 +164,6 @@ class SMARTParser(StateMachineFileParser):
             self.sectionheader = None
             return "GotDocId"
     
-
     def onGotDocId(self, line):
         """Waiting for the .C section to start"""
         if line.startswith(".C"):
