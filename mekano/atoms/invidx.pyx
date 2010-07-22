@@ -1,4 +1,3 @@
-from mekano.errors import *
 cimport atomvector
 cimport atomvectorstore
 cimport corpusstats

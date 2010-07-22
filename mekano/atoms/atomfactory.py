@@ -8,7 +8,6 @@ Useful functions: L{convertAtom} and L{convertAtomVector}.
 from __future__ import with_statement
 import cPickle
 from atomvector import AtomVector
-from ..errors import *
 
 class AtomFactory:
     """
@@ -112,11 +111,11 @@ def convertAtom(oldAF, newAF, atom):
     @param newAF            : The new AtomFactory
     @param atom             : The atom to convert
     @return                 : The converted atom
-    @raise IllegalOperation : If atom cannot be found in oldAF
+    @raise Exception        : If atom cannot be found in oldAF
     """
     o = oldAF.get_object(atom)
     if o not in newAF:
-        raise IllegalOperation, "%r not in newAF" % o
+        raise Exception, "%r not in newAF" % o
     return newAF[o]
 
 def convertAtomVector(oldAF, newAF, av):
@@ -126,13 +125,12 @@ def convertAtomVector(oldAF, newAF, av):
     @param newAF            : The new AtomFactory
     @param av               : The AtomVector to convert
     @return                 : The converted AtomVector
-    @raise IllegalOperation : If an atom in af cannot be found in oldAF
     """
     new_av = AtomVector(av.name)
     for a, v in av.iteritems():
         try:
             a = convertAtom(oldAF, newAF, a)
             new_av[a] = v
-        except IllegalOperation:
+        except Exception:       # todo: why are we suppressing the exception ?!
             pass
     return new_av

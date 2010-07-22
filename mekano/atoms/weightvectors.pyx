@@ -1,6 +1,5 @@
 cimport atomvector
 cimport corpusstats
-from mekano.errors import *
 
 cdef extern from "math.h":
     double log(double x)

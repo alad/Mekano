@@ -12,7 +12,6 @@ alad@cs.cmu.edu
 __version__ = "1.3"
 
 # Misc
-import errors
 import logging
 
 # Atoms

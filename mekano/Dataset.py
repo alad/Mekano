@@ -1,6 +1,5 @@
 from itertools import izip
 from atoms import *
-import errors
 from textual import WordNumberRegexTokenizer
 from io import SMARTParser
 
@@ -138,7 +137,7 @@ class Dataset:
 
     def toSMART(self, fout):
         if self.catfactory is None or self.tokenfactory is None:
-            raise errors.IllegalOperation("Dataset must have catfactory and tokenfactory")
+            raise Exception("Dataset must have catfactory and tokenfactory")
 
         for doc, labels in self:
             fout.write(".I %s\n" % doc.name)
@@ -158,8 +157,7 @@ class Dataset:
 
         self.digest()
          
-        if self.isBinary():
-            raise errors.IllegalOperation("Dataset is already binary")
+        assert not self.isBinary(), "Dataset is already binary"
 
         name = self.name
         all_labels = self.labelset
@@ -243,7 +241,7 @@ class Dataset:
         # do not add incompatible datasets, unless one of them is empty.
         if len(self.docs) > 0 and len(other.docs) > 0:
             if self.catfactory != other.catfactory or self.tokenfactory != other.tokenfactory or self.cs != other.cs:
-                raise errors.IllegalOperation("Incompatible datasets")
+                raise Exception("Incompatible datasets")
         
         if len(self.docs) > 0:
             reference_ds = self

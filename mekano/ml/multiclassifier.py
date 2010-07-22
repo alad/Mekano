@@ -1,6 +1,5 @@
 from __future__ import with_statement
 from ..atoms import AtomVector
-from ..errors import *
 
 class MultiClassifier:
     """

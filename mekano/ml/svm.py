@@ -4,7 +4,6 @@ import tempfile
 import os
 
 from ..atoms import AtomVector
-from ..errors import *
 from multiclassifier import MultiClassifier
 
 class SVMClassifier:
@@ -28,8 +27,7 @@ class SVMClassifier:
     def readmodelfile(self, modelfile):
         with open(modelfile) as fin:
             line = fin.readline()
-            if "SVM" not in line:
-                raise InvalidInput("Not an SVM model file!")
+            assert "SVM" in line, "Not an SVM model file!"
             [fin.readline() for i in xrange(8)]
             line = fin.readline()
             sv = int(line.split()[0])
@@ -102,9 +100,7 @@ class SVMMultiClassifier:
 def _run(cmd):
     print "running:", cmd
     retcode = os.system(cmd)
-    if retcode != 0:
-        print "Return code=", retcode
-        raise Exception("SVM Error")
+    assert retcode == 0
 
 
 def _svm_params(classifier):
