@@ -3,7 +3,6 @@ from __future__ import with_statement
 import tempfile
 import os
 
-from ..Config import Parameters
 from ..atoms import AtomVector
 from ..Errors import *
 from multiclassifier import MultiClassifier
@@ -19,10 +18,10 @@ class SVMClassifier:
         self.w = AtomVector()
         self.b = 0.0
         self.sv = 0
-        self.params = Parameters()
-        self.params.c = 1.0
-        self.params.tmp = "/tmp/"
-        self.params.binary = "svm_perf_learn"
+        self.c = 1.0
+        self.j = None
+        self.tmp = "/tmp/"
+        self.binary = "svm_perf_learn"
         if modelfile is not None:
             self.readmodelfile(modelfile)
 
@@ -50,13 +49,12 @@ class SVMClassifier:
             self.b = b
 
     def train(self, ds):
-        params = self.params
         assert(ds.isBinary())
-        fout = tempfile.NamedTemporaryFile(suffix='svm', dir=params.tmp)
+        fout = tempfile.NamedTemporaryFile(suffix='svm', dir=self.tmp)
         ds.toSVM(fout)
         fout.file.flush()
         modelfilename = fout.name + ".model"
-        _run("%s %s %s %s > /dev/null 2>&1" % (params.binary, to_svm_params(params), fout.name, modelfilename))
+        _run("%s %s %s %s > /dev/null 2>&1" % (self.binary, _svm_params(self), fout.name, modelfilename))
         fout.close()
         self.readmodelfile(modelfilename)
         os.remove(modelfilename)
@@ -71,26 +69,25 @@ class SVMClassifier:
 class SVMMultiClassifier:
     def __init__(self):
         self.mc = MultiClassifier()
-        self.params = Parameters()
         self.labelset = set()
-        self.params.c = 1.0
-        self.params.tmp = "/tmp/"
-        self.params.binary = "svm_perf_learn"
+        self.c = 1.0
+        self.j = None
+        self.tmp = "/tmp/"
+        self.binary = "svm_perf_learn"
         
     def train(self, ds):
-        params = self.params
         bds = ds.binarize()
         positions = None
         print "SVMMultiClassifier: Training with %d docs, %d labels" % (len(ds.docs), len(bds))
         for label in bds:
             if positions is None:
-                fout = tempfile.NamedTemporaryFile(suffix='svm', dir=params.tmp)
+                fout = tempfile.NamedTemporaryFile(suffix='svm', dir=self.tmp)
                 positions = bds[label].toSVM(fout)
             else:
                 bds[label].toSVMSubsequent(fout, positions)
             fout.file.flush()
             modelfilename = "%s-%s.model" % (fout.name, label)
-            _run("%s %s %s %s > /dev/null 2>&1" % (params.binary, to_svm_params(params), fout.name, modelfilename))
+            _run("%s %s %s %s > /dev/null 2>&1" % (self.binary, _svm_params(self), fout.name, modelfilename))
             self.mc.add(label, SVMClassifier(modelfilename))
             os.remove(modelfilename)
         fout.close()
@@ -109,8 +106,13 @@ def _run(cmd):
         print "Return code=", retcode
         raise Exception("SVM Error")
 
-def to_svm_params(params):
-    svm_params = set(["c", "j"])
-    return " ".join("-%s %s" % (k,v) for k,v in params.params.iteritems() if k in svm_params)
 
-            
+def _svm_params(classifier):
+    """Extract .c and .j from classifier object and return cmd-line options for SVM.
+    
+    For example: -c 1.0 -j 2.0"""
+
+    ret = "-c %f" % classifier.c
+    if classifier.j is not None:
+        ret += " -j %f" % classifier.j
+    return ret
