@@ -7,12 +7,13 @@ cdef extern from "math.h":
 cdef class WeightVectors:
     """For creating LTC vectors.
 
-    wv = WeightVectors(cs, cache=False) 
-    Creates a weight-vector cache linked to the given corpus stats.
+        >>> wv = WeightVectors(cs, cache=False) 
 
-    cs.add(unweighted_vector) 
-    weighted_vector = wv[unweighted_vector]
-    assert(weighted_vector.CosineLen() == 1.0)
+    Creates a weight-vector cache linked to the given L{CorpusStats} object.
+
+        >>> cs.add(unweighted_vector)
+        >>> weighted_vector = wv[unweighted_vector]
+        >>> assert weighted_vector.CosineLen() == 1.0
 
     """
     
@@ -24,6 +25,11 @@ cdef class WeightVectors:
     cdef int n_hits
     
     def __init__(self, corpusstats.CorpusStats cs, cache=False):
+        """Create a WeightVector object.
+        
+        @param cs       : The L{CorpusStats} object that this should link to
+        @param cache    : Whether to maintain a cache for fast lookup
+        """
         self.cs = cs
         self.cache = {}
         self.n_access = 0

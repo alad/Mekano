@@ -42,20 +42,19 @@ class StateMachineFileParser:
     """A state machine based line-oriented parser.
 
     You should subclass this and implement 'state'
-    functions that begin with '_on', for example:
-        _onStart(self, line)
+    functions that begin with '_on', e.g., C{_onStart(self, line)}
 
     Each such function:
-      * takes a single argument 'line' which
-        contains the next line read from input string.
-      * returns the next state to go into, e.g. "End",
-        or returns None (i.e. returns nothing) to stay
-        in the same state.
+        - takes a single argument 'line' which
+          contains the next line read from input string.
+        - returns the next state to go into, e.g. "End",
+          or returns None (i.e. returns nothing) to stay
+          in the same state.
     
     Additionally, two special functions must be defined
     with no parameters:
-        _onInit(self)
-        _onFinish(self)
+        1. C{_onInit(self)}
+        2. C{_onFinish(self)}
     to handle initialization (local state) and end of file
     (useful for formats that use no ending tag).
     
@@ -105,9 +104,9 @@ class TrecParser(StateMachineFileParser):
     The callback function receives (docid, text).
 
     To begin parsing, use one of:
-        parse(line)    # call repeatedly for each line.
-        parseFile(fin)
-        parseFileName(fileName)
+        - C{parse(line)}                # call repeatedly for each line.
+        - C{parseFile(fin)}
+        - C{parseFileName(fileName)}
     
     """
     
@@ -144,17 +143,16 @@ class TrecParser(StateMachineFileParser):
 class SMARTParser(StateMachineFileParser):
     """SMART file parser
 
-    tp = SMARTParser(callback, sections = None)
+        >>> tp = SMARTParser(callback, sections = None)
 
     The callback function receives (docid, cats, text).
     
-    sections:    None          Read all sections.
-                 ["T", "W"]    Only read sections .T and .W
+    sections:    None: Read all sections, or ["T", "W"]: Only read sections .T and .W
 
     To begin parsing, use one of:
-        parse(line)    # call repeatedly for each line.
-        parseFile(fin)
-        parseFileName(fileName)
+        - C{parse(line)}                # call repeatedly for each line.
+        - C{parseFile(fin)}
+        - C{parseFileName(fileName)}
 
     """
 
