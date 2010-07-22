@@ -10,9 +10,9 @@ from MultiClassifier import MultiClassifier
 
 class SVMClassifier:
     """SVM Wrapper
-    svm = SVMClassifier(modelfile)
 
-    svm.score(av)
+        >>> svm = SVMClassifier(modelfile)
+        >>> svm.score(av)
     """
 
     def __init__(self, modelfile = None):

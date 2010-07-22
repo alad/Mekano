@@ -36,7 +36,7 @@ from CorpusStats import CorpusStats
 import indri
 
 # Classifiers
-from SVMClassifier import SVMClassifier, SVMMultiClassifier
+from svm import SVMClassifier, SVMMultiClassifier
 from LogisticRegressionClassifier import LogisticRegressionClassifier
 from KNNClassifier import KNNClassifier
 from MultiClassifier import MultiClassifier
