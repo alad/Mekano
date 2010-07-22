@@ -15,15 +15,16 @@ class Dataset:
     """
     A Dataset with 'documents' and 'labels'
 
-    Documents should be AtomVector-like i.e. they should be
-    iterable, yielding (a,v) pairs.
+    Documents should be L{AtomVector}-like i.e. they should be
+    iterable, yielding C{(a,v)} pairs.
 
-    ds = Dataset("reuters")
-    ds.add(doc, labels)
-    :
-    ds.digest()
-
+        >>> ds = Dataset("reuters")
+        >>> ds.add(doc, labels)
+        >>> ds.digest()
+    
+    @todo: Fix semantics of labels.
     """
+    
     def __init__(self, name=""):
         # a human readable name
         self.name = name
@@ -62,6 +63,10 @@ class Dataset:
     
 
     def digest(self, force=False):
+        """Analyze the data and generate an internal list of labels.
+        
+        Useful for binarizing etc.
+        """
         if self.digested and force==False: return
 
         self.labelset = set()
@@ -111,7 +116,7 @@ class Dataset:
         """Write a binary dataset to fout in SVM format.
 
         Returns the byte positions of the labels, which can be used
-        by toSVMSubsequent() to overwrite the labels with something
+        by L{toSVMSubsequent}() to overwrite the labels with something
         else.
         """
         assert(self.isBinary())
@@ -152,7 +157,7 @@ class Dataset:
     def binarize(self):
         """Create and return binary datasets.
 
-        Returns [k,v] where k is a category name, and v is a binary dataset.
+        @return: A C{{k:v}} dictionary where k is a category name, and v is a binary dataset.
         """
 
         self.digest()
@@ -185,6 +190,9 @@ class Dataset:
 
     def makeWeighted(self, cs = None):
         """Convert to a weighted (e.g. LTC) dataset
+        
+        @param cs       : An optional L{CorpusStats} object, otherwise it will be created
+                          an associated with the dataset.
 
         """
 
@@ -204,8 +212,9 @@ class Dataset:
         """Creates count subsets of the dataset.
         
         Subsetting is performed using round-robin.
-        
-        Returns a list of Datasets
+
+        @param count    : Number of subsets to create
+        @return         : A list of datasets
         """
         n = len(self.docs)
         docs_per_set = int(n/count)
@@ -226,6 +235,14 @@ class Dataset:
         return subsets
 
     def kfold(self, count):
+        """Create cross-validation folds.
+        
+        The dataset is broken into `count` pieces, each fold (i.e. train-test pair)
+        is created by assigning 1 piece to `train`, and `count-1` pieces to `test`.
+        
+        @param count        : Number of folds
+        @return             : A list of [train,test] datasets
+        """
         subsets = self.subset(count)
         folds = [[Dataset(), Dataset()] for i in range(count)]
         for i in range(count):
@@ -237,6 +254,16 @@ class Dataset:
         return folds
         
     def __add__(self, other):
+        """Add two datasets.
+        
+        If both datasets are non-empty, then they must be 'compatible',
+        i.e., share the same factories and corpus stats.
+        
+        The resulting dataset combines the docs and labels, and inherits
+        the factories and corpus stats of the non-empty parent dataset.
+
+        If both parents were L{digest}ed, the resulting dataset is also digested.
+        """
         result = Dataset()
         # do not add incompatible datasets, unless one of them is empty.
         if len(self.docs) > 0 and len(other.docs) > 0:
@@ -298,15 +325,19 @@ class Dataset:
         $ rainbow -d model --index 20news/train/*
         $ rainbow -d model --print-matrix=siw > train.txt
 
-        ds = from_rainbow("train.txt")
+            >>> ds = from_rainbow("train.txt")
 
-        ds.catfactory holds the AtomFactory for category names.
-        ds.tokenfactory holds the AtomFactory for the tokens.
+        C{ds.catfactory} holds the L{AtomFactory} for category names.
+        C{ds.tokenfactory} holds the L{AtomFactory} for the tokens.
 
         A test set should share its factories with a training set.
         Therefore, read is like so:
 
-        ds2 = from_rainbow("testfile.txt", linkto = ds)
+            >>> ds2 = from_rainbow("testfile.txt", linkto = ds)
+        
+        @param filename     : File containing rainbow's output
+        @param linkto       : Another dataset whose L{AtomFactory} we should borrow.
+        @return             : A brand new dataset.
         """
 
         # cdef AtomVector.AtomVector av
@@ -346,9 +377,3 @@ class Dataset:
 
 
 
-# Notes:
-# It seems reading and writing in common formats (like SVM, Rainbow) should be
-# the responsility of Dataset. So I am leaving them here for now.
-
-# Well, I don't feel very convinced now. May be SVM-related capabilities should be
-# kept to SVMClassifier.

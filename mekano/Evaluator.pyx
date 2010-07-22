@@ -1,3 +1,5 @@
+"""Evaluation tools"""
+
 from itertools import izip
 from numpy import mean
 from ml.utils import *
@@ -47,13 +49,12 @@ cdef class ConfusionMatrix:
 
 class ConfusionEvaluator():
     """
-    ac = ConfusionEvaluator(labels)
+    Multi-label evaluator for confusion matrix based metrics.
 
-    multi-label evaluator for confusion matrix based metrics.
-
-    ac.add(truthset, predictionset)
-    print ac.f1macro()
-    print ac.f1micro()
+        >>> ac = ConfusionEvaluator(labels)
+        >>> ac.add(truthset, predictionset)
+        >>> print ac.f1macro()
+        >>> print ac.f1micro()
     """
 
     def __init__(self, labels):
@@ -124,8 +125,7 @@ class ConfusionEvaluator():
 
 def getEditDistancefor(truth, prediction):
     """
-    Edit distance between two sets.
-    len(A-B) + len(B-A)
+    Edit distance between two sets, i.e., C{len(A-B) + len(B-A)}
     """
     addition = len(truth-prediction)
     deletion = len(prediction-truth)

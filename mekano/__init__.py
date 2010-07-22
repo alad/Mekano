@@ -9,7 +9,7 @@ Additional documentation is available in the docstrings.
 alad@cs.cmu.edu
 """
 
-__version__ = "1.3"
+__version__ = "2.0"
 
 # Misc
 import logging

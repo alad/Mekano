@@ -13,13 +13,16 @@ dist: tests
 	ssh mh /usr0/alad/install_mekano.sh
 	
 doc: tests
-	cd /Users/alad && epydoc -v --html -o mek mekano
+	cd /Users/alad/ && epydoc -v --html -o /Users/alad/src/mekano/docs mekano
 
 clean:
 	rm -rf build/
 	sudo rm -rf /Library/Python/2.6/site-packages/mekano*
 	rm -rf /tmp/tmp
 	rm -rf /tmp/pyrex
+	
+timing: tests
+	cd timing && python avtime.py
 	
 FORCE:
 
