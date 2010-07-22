@@ -2,7 +2,7 @@ import sys
 import mekano as mk
 
 def testLogisticRegression():
-    lr = mk.ml.logreg.LogisticRegressionClassifier(mu=2.0, LAMBDA=.1)
+    lr = mk.ml.LogisticRegressionClassifier(mu=2.0, LAMBDA=.1)
     ds = mk.Dataset()
     a1 = mk.AtomVector()
     a1[1] = 2

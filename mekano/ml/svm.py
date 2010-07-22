@@ -4,7 +4,7 @@ import tempfile
 import os
 
 from ..Config import Parameters
-from ..AtomVector import AtomVector
+from ..atoms import AtomVector
 from ..Errors import *
 from multiclassifier import MultiClassifier
 

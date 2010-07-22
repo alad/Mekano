@@ -1,4 +1,4 @@
-cimport AtomVector
+cimport mekano.atoms.atomvector as atomvector
 cimport CorpusStats
 from Errors import *
 
@@ -34,12 +34,12 @@ cdef class WeightVectors:
         else:
             self.maintaincache = 0
 
-    def __getitem__(self, AtomVector.AtomVector vec):
+    def __getitem__(self, atomvector.AtomVector vec):
         cdef double n
         cdef int a
         cdef double v
-        cdef AtomVector.dictitr itr, end
-        cdef AtomVector.AtomVector wav
+        cdef atomvector.dictitr itr, end
+        cdef atomvector.AtomVector wav
         cdef int df
 
         self.n_access += 1
@@ -47,7 +47,7 @@ cdef class WeightVectors:
             self.n_hits += 1
             return self.cache[vec]
         else:
-            wav = AtomVector.AtomVector()
+            wav = atomvector.AtomVector()
             n = self.cs.getN()
 
             itr = vec.mydict.begin()

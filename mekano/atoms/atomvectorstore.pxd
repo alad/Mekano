@@ -1,4 +1,4 @@
-cimport AtomVector
+cimport atomvector
 
 cdef extern from "CUtils.h":
 
@@ -16,5 +16,5 @@ cdef class AtomVectorStore:
     cdef public int N
     cdef int itr
 
-    cpdef add(AtomVectorStore self, AtomVector.AtomVector av)
-    cpdef AtomVector.AtomVector getAt(self, int i)
+    cpdef add(AtomVectorStore self, atomvector.AtomVector av)
+    cpdef atomvector.AtomVector getAt(self, int i)

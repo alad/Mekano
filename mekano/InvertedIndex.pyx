@@ -1,8 +1,8 @@
 from Errors import *
-cimport AtomVector
-cimport AtomVectorStore
-cimport CorpusStats
-import AtomVectorStore
+cimport mekano.atoms.atomvector as atomvector
+cimport mekano.atoms.atomvectorstore as atomvectorstore
+cimport mekano.CorpusStats
+import mekano.atoms.atomvectorstore
 import os
 
 cdef class InvertedIndex(CorpusStats.CorpusStats):
@@ -22,28 +22,28 @@ cdef class InvertedIndex(CorpusStats.CorpusStats):
     def __getstate__(self):
         cdef a2avsitr it = self.ii.begin()
         cdef a2avsitr end = self.ii.end()
-        cdef AtomVectorStore.AtomVectorStore avs
+        cdef atomvectorstore.AtomVectorStore avs
         mymap = {}
 
         while (it.neq(end)):
-            mymap[it.first] = <AtomVectorStore.AtomVectorStore> it.second
+            mymap[it.first] = <atomvectorstore.AtomVectorStore> it.second
             it.advance()
 
         return (self.N, mymap)
 
     def __setstate__(self, s):
         cdef int atom
-        cdef AtomVectorStore.AtomVectorStore avs
+        cdef atomvectorstore.AtomVectorStore avs
         
         self.N = s[0]
 
         for k, v in s[1].iteritems():
             atom = k
-            avs = <AtomVectorStore.AtomVectorStore> v
+            avs = <atomvectorstore.AtomVectorStore> v
 
             set_a2avs(self.ii, atom, <void*>avs)
 
-    cpdef add(self, AtomVector.AtomVector vec):
+    cpdef add(self, atomvector.AtomVector vec):
         """
         add(vec, 1)
         The elements of AtomVector-like object 'vec' will be indexed,
@@ -55,8 +55,8 @@ cdef class InvertedIndex(CorpusStats.CorpusStats):
         """
         cdef int a
         cdef double v
-        cdef AtomVector.dictitr itr, end
-        cdef AtomVectorStore.AtomVectorStore avs
+        cdef atomvector.dictitr itr, end
+        cdef atomvectorstore.AtomVectorStore avs
 
         self.N += 1
         itr = vec.mydict.begin()
@@ -65,9 +65,9 @@ cdef class InvertedIndex(CorpusStats.CorpusStats):
             a = itr.first
             v = itr.second
             if has_a2avs(self.ii, a):
-                avs = <AtomVectorStore.AtomVectorStore> self.ii.ele(a)
+                avs = <atomvectorstore.AtomVectorStore> self.ii.ele(a)
             else:
-                avs = AtomVectorStore.AtomVectorStore()
+                avs = atomvectorstore.AtomVectorStore()
                 set_a2avs(self.ii, a, <void*> avs)
 
             avs.add(vec)
@@ -76,7 +76,7 @@ cdef class InvertedIndex(CorpusStats.CorpusStats):
 
     # perhaps this should be made efficient
     cpdef int getDF(self, int a):
-        cdef AtomVectorStore.AtomVectorStore avs
+        cdef atomvectorstore.AtomVectorStore avs
         avs = self.getii(a)
         if avs is None:
             return 0
@@ -89,9 +89,9 @@ cdef class InvertedIndex(CorpusStats.CorpusStats):
     def __len__(self):
         self.ii.size()
 
-    cpdef AtomVectorStore.AtomVectorStore getii(self, int a):
+    cpdef atomvectorstore.AtomVectorStore getii(self, int a):
         if has_a2avs(self.ii, a):
-            return <AtomVectorStore.AtomVectorStore> self.ii.ele(a)
+            return <atomvectorstore.AtomVectorStore> self.ii.ele(a)
         else:
             return None
 

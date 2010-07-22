@@ -1,4 +1,4 @@
-cimport AtomVector
+cimport mekano.atoms.atomvector as atomvector
 import cPickle
 
 
@@ -19,7 +19,7 @@ cdef class CorpusStats:
     """
 
     def __init__(self):
-        self.df = AtomVector.AtomVector()
+        self.df = atomvector.AtomVector()
         self.N = 0
     
     def __reduce__(self):
@@ -31,7 +31,7 @@ cdef class CorpusStats:
     def __setstate__(self, s):
         self.df, self.N = s
 
-    cpdef add(self, AtomVector.AtomVector vec):
+    cpdef add(self, atomvector.AtomVector vec):
         """
         add(av)
 
@@ -39,7 +39,7 @@ cdef class CorpusStats:
         av is assumed to not have duplicate atoms.
         """
         cdef int a
-        cdef AtomVector.dictitr itr, end
+        cdef atomvector.dictitr itr, end
 
         self.N += 1
         itr = vec.mydict.begin()

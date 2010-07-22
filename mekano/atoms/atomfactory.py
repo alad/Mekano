@@ -7,8 +7,8 @@ Useful functions: L{convertAtom} and L{convertAtomVector}.
 
 from __future__ import with_statement
 import cPickle
-from AtomVector import AtomVector
-from Errors import *
+from atomvector import AtomVector
+from ..Errors import *
 
 class AtomFactory:
     """

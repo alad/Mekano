@@ -1,10 +1,10 @@
-cimport AtomVector
+cimport mekano.atoms.atomvector as atomvector
 
 cdef class CorpusStats:
-    cdef AtomVector.AtomVector df
+    cdef atomvector.AtomVector df
     cdef int N
     
-    cpdef add(self, AtomVector.AtomVector av)
+    cpdef add(self, atomvector.AtomVector av)
     cpdef int getDF(self, int a)
     cpdef int getN(self)
     

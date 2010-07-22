@@ -1,4 +1,4 @@
-from AtomVector import AtomVector
+from mekano import AtomVector
 
 """mekano.Textual
 

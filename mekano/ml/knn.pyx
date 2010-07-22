@@ -1,7 +1,7 @@
 from python_dict cimport *
-cimport mekano.AtomVector
+cimport mekano.atoms.atomvector as atomvector
 cimport mekano.InvertedIndex
-cimport mekano.AtomVectorStore
+cimport mekano.atoms.atomvectorstore as atomvectorstore
 import cPickle
 
 cdef extern from "math.h":
@@ -59,16 +59,16 @@ cdef class KNNClassifier:
     """
 
     cdef mekano.InvertedIndex.InvertedIndex ii
-    cdef mekano.AtomVector.AtomVector idf
+    cdef atomvector.AtomVector idf
     cdef double N
-    cdef mekano.AtomVector.AtomVector scores
+    cdef atomvector.AtomVector scores
     cdef NeighborVector* nv
     cdef NeighborSet* ns
     cdef int K
 
     def __cinit__(self):
         self.ii = mekano.InvertedIndex.InvertedIndex()
-        self.idf = mekano.AtomVector.AtomVector()
+        self.idf = atomvector.AtomVector()
         self.nv = new_nv()
         self.ns = new_ns()
         self.K = 10
@@ -108,13 +108,13 @@ cdef class KNNClassifier:
             df = <double>self.ii.getDF(atom)
             self.idf[atom] = log((n+0.0)/df)
 
-    def score(self, mekano.AtomVector.AtomVector vec, labels):
+    def score(self, atomvector.AtomVector vec, labels):
         cdef int a, i
         cdef double N, v
         cdef double idf_a = 0.0
-        cdef mekano.AtomVector.dictitr itr, end
-        cdef mekano.AtomVectorStore.AtomVectorStore avs
-        cdef mekano.AtomVector.AtomVector neighbor
+        cdef atomvector.dictitr itr, end
+        cdef atomvectorstore.AtomVectorStore avs
+        cdef atomvector.AtomVector neighbor
         cdef double vote
         
         self.ns.clear()
@@ -155,7 +155,7 @@ cdef class KNNClassifier:
             l = <int> label
             s = 0.0
             for 0 <= i < K:
-                neighbor = <mekano.AtomVector.AtomVector> self.nv.ele(i).neighbor
+                neighbor = <atomvector.AtomVector> self.nv.ele(i).neighbor
                 vote = <double> self.nv.ele(i).score
                 if neighbor.contains(l):
                     s += vote

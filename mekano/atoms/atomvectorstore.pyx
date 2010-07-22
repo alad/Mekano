@@ -1,5 +1,5 @@
-cimport AtomVector
-import AtomVector
+cimport atomvector
+import atomvector
 
 cdef class AtomVectorStore:
     """
@@ -26,7 +26,7 @@ cdef class AtomVectorStore:
         for av in s:
             self.add(av)
 
-    cpdef add(AtomVectorStore self, AtomVector.AtomVector av):
+    cpdef add(AtomVectorStore self, atomvector.AtomVector av):
         add_store(self.mystore, <void*> av)
         self.N += 1
 
@@ -39,23 +39,23 @@ cdef class AtomVectorStore:
 
     # extension types have __next__ instead of next()
     def __next__(AtomVectorStore self):
-        cdef AtomVector.AtomVector av
+        cdef atomvector.AtomVector av
 
         if self.itr >= self.N:
             raise StopIteration
 
-        av = <AtomVector.AtomVector> self.mystore.ele(self.itr)
+        av = <atomvector.AtomVector> self.mystore.ele(self.itr)
         self.itr += 1
         return av
 
     def __getitem__(self, int i):
         return self.getAt(i)
 
-    cpdef AtomVector.AtomVector getAt(self, int i):
+    cpdef atomvector.AtomVector getAt(self, int i):
         if i >= self.N:
             raise IndexError
 
-        return <AtomVector.AtomVector> self.mystore.ele(i)
+        return <atomvector.AtomVector> self.mystore.ele(i)
 
     def __len__(self):
         return self.N

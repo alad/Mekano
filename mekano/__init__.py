@@ -16,13 +16,9 @@ import Errors as errors
 import Logging as logging
 
 # Atoms
-import AtomFactory as af
-from AtomVector import AtomVector
-from AtomFactory import AtomFactory
-from AtomVectorStore import AtomVectorStore
+from atoms import *
 
-# Text processing
-import Textual as textual
+import textual
 
 # IO
 import IO as io

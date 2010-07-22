@@ -1,9 +1,9 @@
 from itertools import izip
-from mekano import AtomVector, AtomFactory
+from atoms import AtomVector, AtomFactory
 from CorpusStats import CorpusStats
 from WeightVectors import WeightVectors
 import Errors as errors
-from Textual import WordNumberRegexTokenizer
+from textual import WordNumberRegexTokenizer
 from IO import SMARTParser
 
 
