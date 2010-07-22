@@ -1,5 +1,5 @@
 from itertools import izip
-from ..Evaluator import ConfusionMatrix, DegenerateMetric
+from ..evaluator import ConfusionMatrix, DegenerateMetric
 from utils import *
 
 class Thresholder:

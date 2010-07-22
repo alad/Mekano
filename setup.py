@@ -30,8 +30,8 @@ ext_WV = Extension("mekano.atoms.weightvectors",
                         ["mekano/atoms/weightvectors.pyx"],
                         language="c++")
 
-ext_Evaluator = Extension("mekano.Evaluator",
-                        ["mekano/Evaluator.pyx"],
+ext_Evaluator = Extension("mekano.evaluator",
+                        ["mekano/evaluator.pyx"],
                         language="c++")
 
 
