@@ -10,24 +10,24 @@ ext_AtomVectorStore = Extension("mekano.atoms.atomvectorstore",
                              ["mekano/atoms/atomvectorstore.pyx", "support/CUtils.cpp"],
                              language="c++")
 
-ext_CS = Extension("mekano.CorpusStats",
-                        ["mekano/CorpusStats.pyx", "mekano/CorpusStats.pxd", "mekano/atoms/atomvector.pxd"],
+ext_CS = Extension("mekano.atoms.corpusstats",
+                        ["mekano/atoms/corpusstats.pyx", "mekano/atoms/corpusstats.pxd", "mekano/atoms/atomvector.pxd"],
                         language="c++")
 
 ext_LR = Extension("mekano.ml.logreg",
                              ["mekano/ml/logreg.pyx", "mekano/atoms/atomvector.pxd", "support/LRHelper.cpp"],
                              language="c++")
 
-ext_InvertedIndex = Extension("mekano.InvertedIndex",
-                        ["mekano/InvertedIndex.pyx", "mekano/InvertedIndex.pxd", "mekano/atoms/atomvector.pxd", "support/CUtils.cpp"],
+ext_InvertedIndex = Extension("mekano.atoms.invidx",
+                        ["mekano/atoms/invidx.pyx", "mekano/atoms/invidx.pxd", "mekano/atoms/atomvector.pxd", "support/CUtils.cpp"],
                         language="c++")
 
 ext_KNNClassifier = Extension("mekano.ml.knn",
-                        ["mekano/ml/knn.pyx", "mekano/atoms/atomvector.pxd", "mekano/InvertedIndex.pxd", "support/CUtils.cpp"],
+                        ["mekano/ml/knn.pyx", "mekano/atoms/atomvector.pxd", "mekano/atoms/invidx.pxd", "support/CUtils.cpp"],
                         language="c++")
 
-ext_WV = Extension("mekano.WeightVectors",
-                        ["mekano/WeightVectors.pyx"],
+ext_WV = Extension("mekano.atoms.weightvectors",
+                        ["mekano/atoms/weightvectors.pyx"],
                         language="c++")
 
 ext_Evaluator = Extension("mekano.Evaluator",

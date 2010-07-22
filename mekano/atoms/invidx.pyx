@@ -1,16 +1,17 @@
-from Errors import *
-cimport mekano.atoms.atomvector as atomvector
-cimport mekano.atoms.atomvectorstore as atomvectorstore
-cimport mekano.CorpusStats
-import mekano.atoms.atomvectorstore
+from mekano.errors import *
+cimport atomvector
+cimport atomvectorstore
+cimport corpusstats
+import atomvectorstore
+import corpusstats
 import os
 
-cdef class InvertedIndex(CorpusStats.CorpusStats):
+cdef class InvertedIndex(corpusstats.CorpusStats):
     def __cinit__(self):
         self.ii = new_a2avs();
 
     def __init__(self):
-        CorpusStats.CorpusStats.__init__(self)
+        corpusstats.CorpusStats.__init__(self)
         self.N = 0
 
     def __dealloc__(self):

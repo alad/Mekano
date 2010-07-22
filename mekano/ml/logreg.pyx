@@ -1,4 +1,4 @@
-from mekano.Dataset import Dataset
+from mekano.dataset import Dataset
 cimport mekano.atoms.atomvector as atomvector
 import sys
 

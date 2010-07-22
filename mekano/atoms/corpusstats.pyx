@@ -1,4 +1,4 @@
-cimport mekano.atoms.atomvector as atomvector
+cimport atomvector
 import cPickle
 
 

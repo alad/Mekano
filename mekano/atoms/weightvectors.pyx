@@ -1,6 +1,6 @@
-cimport mekano.atoms.atomvector as atomvector
-cimport CorpusStats
-from Errors import *
+cimport atomvector
+cimport corpusstats
+from mekano.errors import *
 
 cdef extern from "math.h":
     double log(double x)
@@ -18,13 +18,13 @@ cdef class WeightVectors:
     """
     
     cdef double n
-    cdef CorpusStats.CorpusStats cs
+    cdef corpusstats.CorpusStats cs
     cdef object cache
     cdef int maintaincache
     cdef int n_access
     cdef int n_hits
     
-    def __init__(self, CorpusStats.CorpusStats cs, cache=False):
+    def __init__(self, corpusstats.CorpusStats cs, cache=False):
         self.cs = cs
         self.cache = {}
         self.n_access = 0

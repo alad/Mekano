@@ -1,4 +1,4 @@
-cimport mekano.atoms.atomvector as atomvector
+cimport atomvector
 
 cdef class CorpusStats:
     cdef atomvector.AtomVector df

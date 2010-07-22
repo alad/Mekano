@@ -4,7 +4,7 @@ import tempfile
 import os
 
 from ..atoms import AtomVector
-from ..Errors import *
+from ..errors import *
 from multiclassifier import MultiClassifier
 
 class SVMClassifier:

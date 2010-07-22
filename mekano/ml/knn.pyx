@@ -1,6 +1,6 @@
 from python_dict cimport *
 cimport mekano.atoms.atomvector as atomvector
-cimport mekano.InvertedIndex
+cimport mekano.atoms.invidx as invidx
 cimport mekano.atoms.atomvectorstore as atomvectorstore
 import cPickle
 
@@ -58,7 +58,7 @@ cdef class KNNClassifier:
     sc = knn.score(vec, labels)
     """
 
-    cdef mekano.InvertedIndex.InvertedIndex ii
+    cdef invidx.InvertedIndex ii
     cdef atomvector.AtomVector idf
     cdef double N
     cdef atomvector.AtomVector scores
@@ -67,7 +67,7 @@ cdef class KNNClassifier:
     cdef int K
 
     def __cinit__(self):
-        self.ii = mekano.InvertedIndex.InvertedIndex()
+        self.ii = invidx.InvertedIndex()
         self.idf = atomvector.AtomVector()
         self.nv = new_nv()
         self.ns = new_ns()
