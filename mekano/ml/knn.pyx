@@ -1,7 +1,7 @@
 from python_dict cimport *
-cimport AtomVector
-cimport InvertedIndex
-cimport AtomVectorStore
+cimport mekano.AtomVector
+cimport mekano.InvertedIndex
+cimport mekano.AtomVectorStore
 import cPickle
 
 cdef extern from "math.h":
@@ -58,17 +58,17 @@ cdef class KNNClassifier:
     sc = knn.score(vec, labels)
     """
 
-    cdef InvertedIndex.InvertedIndex ii
-    cdef AtomVector.AtomVector idf
+    cdef mekano.InvertedIndex.InvertedIndex ii
+    cdef mekano.AtomVector.AtomVector idf
     cdef double N
-    cdef AtomVector.AtomVector scores
+    cdef mekano.AtomVector.AtomVector scores
     cdef NeighborVector* nv
     cdef NeighborSet* ns
     cdef int K
 
     def __cinit__(self):
-        self.ii = InvertedIndex.InvertedIndex()
-        self.idf = AtomVector.AtomVector()
+        self.ii = mekano.InvertedIndex.InvertedIndex()
+        self.idf = mekano.AtomVector.AtomVector()
         self.nv = new_nv()
         self.ns = new_ns()
         self.K = 10
@@ -108,13 +108,13 @@ cdef class KNNClassifier:
             df = <double>self.ii.getDF(atom)
             self.idf[atom] = log((n+0.0)/df)
 
-    def score(self, AtomVector.AtomVector vec, labels):
+    def score(self, mekano.AtomVector.AtomVector vec, labels):
         cdef int a, i
         cdef double N, v
         cdef double idf_a = 0.0
-        cdef AtomVector.dictitr itr, end
-        cdef AtomVectorStore.AtomVectorStore avs
-        cdef AtomVector.AtomVector neighbor
+        cdef mekano.AtomVector.dictitr itr, end
+        cdef mekano.AtomVectorStore.AtomVectorStore avs
+        cdef mekano.AtomVector.AtomVector neighbor
         cdef double vote
         
         self.ns.clear()
@@ -155,7 +155,7 @@ cdef class KNNClassifier:
             l = <int> label
             s = 0.0
             for 0 <= i < K:
-                neighbor = <AtomVector.AtomVector> self.nv.ele(i).neighbor
+                neighbor = <mekano.AtomVector.AtomVector> self.nv.ele(i).neighbor
                 vote = <double> self.nv.ele(i).score
                 if neighbor.contains(l):
                     s += vote

@@ -8,7 +8,7 @@ def setup():
 def testThresholding():
     # We will do it for one label only,
     # since tresholdder treats all labels separately in any case.
-    t = mk.Thresholder.Thresholder("test")
+    t = mk.ml.thresholder.Thresholder("test")
     t.add(set([1]), {1:.75})
     t.add(set([]), {1:.3})
     t.add(set([1]), {1:.6})

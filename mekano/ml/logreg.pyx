@@ -1,5 +1,5 @@
-from Dataset import Dataset
-cimport AtomVector
+from mekano.Dataset import Dataset
+cimport mekano.AtomVector
 import sys
 
 cdef extern from "math.h":
@@ -27,11 +27,11 @@ cdef class LogisticRegressionClassifier(object):
     cdef public double epsilon
     cdef public double c
     cdef public int maxiter
-    cdef public AtomVector.AtomVector w
+    cdef public mekano.AtomVector.AtomVector w
     cdef public object mu
     
     def __cinit__(self, maxiter=10, epsilon=1e-8, mu=0.0, double LAMBDA=0.1, double c=1.0):
-        self.w = AtomVector.AtomVector()
+        self.w = mekano.AtomVector.AtomVector()
         self.b = 0.0
         self.c = c
         self.maxiter = maxiter
@@ -62,14 +62,14 @@ cdef class LogisticRegressionClassifier(object):
 
         cdef double v
 
-        self.w = AtomVector.AtomVector()
+        self.w = mekano.AtomVector.AtomVector()
         for v in w:
             if fabs(v) > 1e-5:
                 self.w[i+1] = v
             i += 1
         self.b = b
     
-    def score(self, AtomVector.AtomVector av):
+    def score(self, mekano.AtomVector.AtomVector av):
         cdef double s = self.b + av.dot(self.w)
         return 1.0/(1.0+exp(-s))
     

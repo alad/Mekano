@@ -3,10 +3,10 @@ from __future__ import with_statement
 import tempfile
 import os
 
-from Config import Parameters
-from AtomVector import AtomVector
-from Errors import *
-from MultiClassifier import MultiClassifier
+from ..Config import Parameters
+from ..AtomVector import AtomVector
+from ..Errors import *
+from multiclassifier import MultiClassifier
 
 class SVMClassifier:
     """SVM Wrapper

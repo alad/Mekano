@@ -35,15 +35,5 @@ from WeightVectors import WeightVectors
 from CorpusStats import CorpusStats
 import indri
 
-# Classifiers
-from svm import SVMClassifier, SVMMultiClassifier
-from LogisticRegressionClassifier import LogisticRegressionClassifier
-from KNNClassifier import KNNClassifier
-from MultiClassifier import MultiClassifier
 
-from ClassifierDriver import *
-
-# Evaluation
-import Evaluator as eval
-import Thresholder
-
+import ml

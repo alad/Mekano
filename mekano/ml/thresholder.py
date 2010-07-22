@@ -1,6 +1,6 @@
 from itertools import izip
-from Evaluator import ConfusionMatrix, DegenerateMetric
-from ClassifierDriver import *
+from ..Evaluator import ConfusionMatrix, DegenerateMetric
+from utils import *
 
 class Thresholder:
     """

@@ -1,6 +1,6 @@
 from itertools import izip
 from numpy import mean
-from ClassifierDriver import *
+from ml.utils import *
 
 class DegenerateMetric(Exception):
     pass
