@@ -1,24 +1,30 @@
 cdef class AtomVector:
-    """
-    a = AtomVector(vec = None, name="")
-    If supplied, vec is used to initialize; should support iteritems().
-    
-    a = AtomVector.fromstring("1:10.0 2:25.0 7:13.0")
+    """A dictionary-like object for representing sparse vectors.
 
-    Behaves like a defaultdict(float).
-        Has iterkeys(), iteritems(), supports 'in'.
+    Initialization:
+        >>> a = AtomVector(vec = None, name="")     # vec should support iteritems() returning int:float pairs.
+        >>> a = AtomVector.fromstring("1:10.0 2:25.0 7:13.0")
+        >>> a = b.copy()                            # another AtomVector
+        >>> a.clear()
 
-    Printing:
-        a.tostring(af)  # An atomfactory
+    Iterating (behaves like a C{defaultdict(float)}):
+        >>> a.iterkeys()
+        >>> a.iteritems()
+        >>> for atom in a:
+        ...     print atom
+
+    Printing (using an L{AtomFactory}):
+        >>> a.tostring(af)
     
     Operators:
-        +   Merges two atomvectors.
-        *   Does dot product.
-        /   Element-wise divide (normalization).
+        >>> a + b               # Merges two atomvectors
+        >>> a * b               # Dot product
+        >>> a / c               # Element-wise divide (c is a float)
     
-    Normalization:
-        a.Normalize()       # in-place
-        a.Normalized()  
+    Length-related:
+        >>> a.Normalize()       # in-place
+        >>> a.Normalized()      # returns a copy.
+        >>> a.CosineLeng()
     
     """
 
@@ -50,6 +56,11 @@ cdef class AtomVector:
         return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (a,v) for a,v in self.iteritems()]) + "])"
         
     def tostring(self, af):
+        """Return a pretty-formatted string.
+        
+        @param af       : An L{AtomFactory}
+        @return         : A nicely formatted string, with "..." in case it's too long.
+        """
         if len(self) < 50:
             return "(" + self.name + "[" + ",".join(["%s:%5.3f" % (af.get_object(a),v) for a,v in self.iteritems()]) + "])"
         else:

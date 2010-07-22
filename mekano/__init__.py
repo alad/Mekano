@@ -27,11 +27,13 @@ import Textual as textual
 # IO
 import IO as io
 from Dataset import Dataset
+#import Collections as collections
 
 # Indexing
 from InvertedIndex import InvertedIndex
 from WeightVectors import WeightVectors
 from CorpusStats import CorpusStats
+import indri
 
 # Classifiers
 from SVMClassifier import SVMClassifier, SVMMultiClassifier

@@ -1,3 +1,10 @@
+"""Classes and functions for creating and managing unique atoms.
+
+The main exposed class is L{AtomFactory}.
+
+Useful functions: L{convertAtom} and L{convertAtomVector}.
+"""
+
 from __future__ import with_statement
 import cPickle
 from AtomVector import AtomVector
@@ -6,27 +13,26 @@ from Errors import *
 class AtomFactory:
     """
     A single AtomFactory makes unique atoms for the given
-    items. By atoms, we just mean numbers.
+    objects. By atoms, we just mean numbers.
+    Objects just have to be hashable.
 
     To get the Pipeline's (type, object) atoms, just use
     tuples!
 
-    af = AtomFactory("tokens")
-    a1 = af["apples"]
-    a2 = af["oranges"]
-
-    assert(a1 == 1)
-    assert(a2 == 2)
+        >>> af = AtomFactory("mytokens")
+        >>> a1 = af["apples"]
+        >>> a2 = af["oranges"]
+        >>> assert(a1 == 1)
+        >>> assert(a2 == 2)
+        >>> assert(af(1) == "apples")
+        >>> a.lock()                        # Do not allow changes.
+        
+    Loading/saving:
+        >>> a = AtomFactory.fromfile(filename)
+        >>> a.save(filename)
     
-    assert(af(1) == "apples")
+    @note:  C{af(1)} is candy for C{af.get_object(1)}
     
-    Note: af(1) is candy for af.get_object(1)
-    
-    Module functions:
-    convertAtom(oldAF, newAF, atom)
-    convertAtomVector(oldAF, newAF, av)
-        Useful with feature selection, e.g.,
-        when using af.remove(objects).
     """
 
     def __init__(self, name = "noname"):
@@ -63,8 +69,9 @@ class AtomFactory:
         return obj in self.obj_to_atom
 
     def lock(self):
-        """
-        No need atoms can be added. Only old ones can be retrieved.
+        """Lock the AtomFactory. 
+        
+        No new atoms can be added; Only old ones can be retrieved.
         """
         self.locked = True
     
@@ -83,7 +90,7 @@ class AtomFactory:
             cPickle.dump(self, fout, -1)
     
     def savetxt(self, filename):
-        """Save each object on a line
+        """Save each object on a line.
         
         This should be enough to reconstruct the AtomFactory,
         and is also useful for things like LDA's vocabulary file.
@@ -99,12 +106,28 @@ class AtomFactory:
         return a
 
 def convertAtom(oldAF, newAF, atom):
+    """Convert an atom from one AtomFactory to another.
+    
+    @param oldAF            : The old AtomFactory to which atom belongs
+    @param newAF            : The new AtomFactory
+    @param atom             : The atom to convert
+    @return                 : The converted atom
+    @raise IllegalOperation : If atom cannot be found in oldAF
+    """
     o = oldAF.get_object(atom)
     if o not in newAF:
         raise IllegalOperation, "%r not in newAF" % o
     return newAF[o]
 
 def convertAtomVector(oldAF, newAF, av):
+    """Convert an L{AtomVector} from one AtomFactory to another.
+    
+    @param oldAF            : The old AtomFactory to which AtomVector av belongs
+    @param newAF            : The new AtomFactory
+    @param av               : The AtomVector to convert
+    @return                 : The converted AtomVector
+    @raise IllegalOperation : If an atom in af cannot be found in oldAF
+    """
     new_av = AtomVector(av.name)
     for a, v in av.iteritems():
         try:

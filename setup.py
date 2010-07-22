@@ -37,7 +37,7 @@ ext_Evaluator = Extension("mekano.Evaluator",
 
 setup(
   name = "mekano",
-  version = "1.3",
+  version = "1.4",
   description = "Mekano: Building blocks for IR & ML",
   author = "Abhimanyu Lad",
   author_email = "alad@cs.cmu.edu",

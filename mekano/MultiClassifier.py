@@ -12,7 +12,8 @@ class MultiClassifier:
     First, manually create the classifier for each label, then
     add it to MultiClasifier:
     
-    mc.add(label, classifier)
+        >>> mc.add(label, classifier)
+    
     Each classifier should provide a score function.
 
     scores = mc.score(av)
@@ -22,7 +23,8 @@ class MultiClassifier:
     and optimal params to be passed to BaseClassifier, in which case
     MultiClassifier with binarize the dataset and do the training:
     
-    mc = mekano.MultiClassifier.create(mekano.LogisticRegressionClassifier, trainset, LAMBDA=0.1, c=1.0)
+        >>> mc = mekano.MultiClassifier.create(mekano.LogisticRegressionClassifier, trainset, LAMBDA=0.1, c=1.0)
+    
     """
 
     def __init__(self):
