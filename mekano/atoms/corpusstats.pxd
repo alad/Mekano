@@ -1,8 +1,8 @@
 cimport atomvector
 
 cdef class CorpusStats:
-    cdef atomvector.AtomVector df
-    cdef int N
+    cdef public atomvector.AtomVector df
+    cdef public int N
     
     cpdef add(self, atomvector.AtomVector av)
     cpdef int getDF(self, int a)
