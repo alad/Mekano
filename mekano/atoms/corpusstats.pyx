@@ -46,7 +46,8 @@ cdef class CorpusStats:
         end = vec.mydict.end()
         while(itr.neq(end)):
             a = itr.first
-            self.df[a] = self.df[a] + 1
+            #self.df[a] = self.df[a] + 1
+            self.df.set(a, self.df.get(a)+1)
             itr.advance()
 
     def __repr__(self):
