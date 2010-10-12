@@ -16,16 +16,16 @@ Features
 
 Most of the code is in Python, with some crucial functions implemented in C++.
 
-See http://www.cs.cmu.edu/~alad/mekano for documentation.
+See [http://www.cs.cmu.edu/~alad/mekano](http://www.cs.cmu.edu/~alad/mekano) for documentation.
 
 Installation
 ============
 `python setup.py install`
 
 **Dependencies**:
-    python >= 2.6
-    cython >= 0.10
-    numpy >= 1.1.1 (required by evaluator.py)
+  python >= 2.6
+  cython >= 0.10
+  numpy >= 1.1.1 (required by evaluator.py)
 
 
 
