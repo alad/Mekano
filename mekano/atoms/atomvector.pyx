@@ -1,3 +1,9 @@
+"""atomvector module
+
+The main functionality is provided by the L{AtomVector} class.
+
+"""
+
 cdef class AtomVector:
     """A dictionary-like object for representing sparse vectors.
 

@@ -15,9 +15,6 @@ class AtomFactory:
     objects. By atoms, we just mean numbers.
     Objects just have to be hashable.
 
-    To get the Pipeline's (type, object) atoms, just use
-    tuples!
-
         >>> af = AtomFactory("mytokens")
         >>> a1 = af["apples"]
         >>> a2 = af["oranges"]
