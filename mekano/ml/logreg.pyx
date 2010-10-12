@@ -39,8 +39,8 @@ cdef class LogisticRegressionClassifier:
         self.LAMBDA = LAMBDA
     
     def __init__(self, maxiter=10, epsilon=1e-8, mu=0.0, LAMBDA=0.1, c=1.0):
-        """
-		maxiter in utility08 was 10. May be it was too low? We set it to 100.
+        """Initialize the LR classifier.
+        
 		mu can be a double value, or a list of values (at least as many as #features+1)
         lambda is a double value that controls the strength of the prior.
 		"""
