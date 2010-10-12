@@ -20,12 +20,12 @@ See http://www.cs.cmu.edu/~alad/mekano for documentation.
 
 Installation
 ============
-python setup.py install
+`python setup.py install`
 
-Dependencies:
-  python >= 2.6
-  cython >= 0.10
-  numpy >= 1.1.1 (required by evaluator.py)
+**Dependencies**:
+    python >= 2.6
+    cython >= 0.10
+    numpy >= 1.1.1 (required by evaluator.py)
 
 
 
