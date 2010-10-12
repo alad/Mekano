@@ -101,6 +101,7 @@ void copyToDVec(PyObject *src, DVec *dest) {
     }
 }
 
+// Following code contributed by Jian Zhang
 LRREAL LogisticRegressionLoss1(DVec& SIGMA,
 						DVec& S, 
 						DVec& LAMBDA,
