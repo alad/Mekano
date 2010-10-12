@@ -6,6 +6,7 @@ with a special focus on text processing.
 
 Features
 ========
+
 * Representing text documents as sparse vectors
 * Representing a collection of documents as a dataset, which can be subsetted for cross-validation etc.
 * Evaluation using various metrics
@@ -23,7 +24,8 @@ Installation
 `python setup.py install`
 
 **Dependencies**:
-  * python >= 2.6
-  * cython >= 0.10
-  * numpy >= 1.1.1 (required by evaluator.py)
+
+* python >= 2.6
+* cython >= 0.10
+* numpy >= 1.1.1 (required by evaluator.py)
 
