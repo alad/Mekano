@@ -23,9 +23,7 @@ Installation
 `python setup.py install`
 
 **Dependencies**:
-  python >= 2.6
-  cython >= 0.10
-  numpy >= 1.1.1 (required by evaluator.py)
-
-
+* python >= 2.6
+* cython >= 0.10
+* numpy >= 1.1.1 (required by evaluator.py)
 
