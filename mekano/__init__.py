@@ -1,12 +1,23 @@
 """\
 Mekano
 ======
+Provides low-level building blocks for information retrieval and machine learning,
+with a special focus on text processing.
 
-Python building blocks for IR and machine learning research.
+Features
+========
+* Representing text documents as sparse vectors
+* Representing a collection of documents as a dataset, which can be subsetted for cross-validation etc.
+* Evaluation using various metrics
+* Reading various common input formats like SMART and TREC
+* Parsing and tokenizing text
+* Maintaining corpus statistics (term frequecies), creating inverted indexes
+* Creating weighted document vectors (TF--IDF) based on corpus statistics
 
-Additional documentation is available in the docstrings.
+Most of the code is in Python, with some crucial functions implemented in C++.
 
-alad@cs.cmu.edu
+Detailed documentation is available in the docstrings.
+
 """
 
 __version__ = "2.0"
