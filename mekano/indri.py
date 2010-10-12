@@ -73,6 +73,6 @@ def runquery(index, query, printDocuments = False, printSnippets = False):
             else:
                 result.text += line + " "
     return ret
-                
                     
-    
+
+
